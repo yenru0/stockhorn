@@ -1,0 +1,6 @@
+# custom
+seasons/
+
+# dev
+venv/
+.idea/

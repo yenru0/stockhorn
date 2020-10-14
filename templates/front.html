@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en"> <!-- <html lang="en" style="height: 100%"> -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>stockhorn 현황</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.7"></script>
+</head>
+<body>
+<div class="container">
+    <canvas id="myChart"></canvas>
+</div>
+<div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script>
+    var ctx = document.getElementById('myChart');
+
+    fetch('/public/cost/all/chart/').then(response => {
+        return response.json();
+    }).then((json) => {
+            graphing(json);
+        }
+    )
+
+    function graphing(data) {
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: 'stockhorn stat',
+                    backgroundColor: 'rgba(255, 80, 100)',
+                    data: data["cost"],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{ticks: {}}],
+                    xAxes: [{type: 'linear', position: 'bottom', ticks: {stepSize: 1, beginAtZero: true}}]
+                },
+                elements: {
+                    point: {
+                        radius: 1,
+                    }
+                },
+                plugins: {
+                    zoom: {
+                        pan: {
+                            enabled: true,
+                            mode: 'xy',
+                            rangeMin: {
+                                // Format of min pan range depends on scale type
+                                x: null,
+                                y: null
+                            },
+                            rangeMax: {
+                                // Format of max pan range depends on scale type
+                                x: null,
+                                y: null
+                            },
+
+                            // On category scale, factor of pan velocity
+                            speed: 20,
+
+                            // Minimal pan distance required before actually applying pan
+                            threshold: 10,
+                        },
+                        zoom: {
+                            // Boolean to enable zooming
+                            enabled: true,
+                            drag: false,
+
+                            mode: 'xy',
+
+                            rangeMin: {
+                                x: null,
+                                y: null
+                            },
+                            rangeMax: {
+                                x: null,
+                                y: null
+                            },
+
+                            speed: 0.1,
+                            threshold: 2,
+
+                            sensitivity: 3,
+                        }
+                    }
+                }
+
+            },
+
+
+        })
+    }; </script>
+</body>
+</html>
